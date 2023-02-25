@@ -111,6 +111,7 @@ int removeList(struct ListNode **root)
     }
     return 1;
 }
+
 void display(struct ListNode *start)
 {
     int count = 0;

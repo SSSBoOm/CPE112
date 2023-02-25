@@ -16,16 +16,19 @@ void createList(ListNode **start)
     scanf("%s", num);
     while (strcmp(num, "END"))
     {
-        int convertedNum = atoi(num);
         newNode = (ListNode *)malloc(sizeof(ListNode));
-        newNode->val = convertedNum;
+        newNode->val = atoi(num);
         newNode->next = NULL;
+
         if (*start == NULL)
+        {
             *start = newNode;
+        }
         else
+        {
             ptr->next = newNode;
+        }
         ptr = newNode;
-        // printf("Enter data (-1 to end): ");
         scanf("%s", num);
     }
 }
@@ -33,7 +36,6 @@ void createList(ListNode **start)
 void display(ListNode *start)
 {
     ListNode *ptr = start;
-    // printf("Data in the list: ");
     while (ptr != NULL)
     {
         printf("%d ", ptr->val);
@@ -70,11 +72,11 @@ void *reverseSubLinkedList(ListNode **start)
 int main()
 {
     ListNode *ll;
+
     createList(&ll);
-    // display(ll);
-    // deleteDuplicateNumber(ll);
-    // reverseLinkList(&ll);
+
     reverseSubLinkedList(&ll);
+
     display(ll);
     return 0;
 }
