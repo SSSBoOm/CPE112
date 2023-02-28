@@ -154,7 +154,6 @@ int main()
         if (!delete (root))
         {
             printf("None ");
-            // break;
         }
     }
     printf("\n");

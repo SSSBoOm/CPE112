@@ -24,7 +24,7 @@ queue *createQueue()
     return newQueue;
 }
 
-int insert(queue *root, char val, int *num)
+int insert(queue *root, char val)
 {
     node *newNode = (node *)malloc(sizeof(node));
     newNode->prev = NULL;

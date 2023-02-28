@@ -82,6 +82,7 @@ int delete(queue *root)
     }
     else if (delete == root->rear)
     {
+        root->rear = delete->prev;
         (delete->prev)->next = NULL;
     }
     else
