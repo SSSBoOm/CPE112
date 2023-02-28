@@ -5,13 +5,14 @@
 typedef struct node
 {
     int priority;
-    char val;
+    char val[32];
     struct node *prev;
     struct node *next;
 } node;
 
 typedef struct queue
 {
+    int MaxPriority;
     struct node *front;
     struct node *rear;
 } queue;
@@ -21,31 +22,28 @@ queue *createQueue()
     queue *newQueue = (queue *)malloc(sizeof(queue));
     newQueue->front = NULL;
     newQueue->rear = NULL;
+    newQueue->MaxPriority = 0;
 
     return newQueue;
 }
 
-int priority(char val)
+int insert(queue *root, char *val, int pri)
 {
-    if (val == 'a' || val == 'A' || val == 'e' || val == 'E' || val == 'i' || val == 'I' || val == 'o' || val == 'O' || val == 'u' || val == 'U' || val == '.' || val == '!')
+    if (pri == -1)
     {
-        return 1;
+        pri = root->MaxPriority + 1;
     }
-    return 0;
-}
 
-int insert(queue *root, char val, int *num)
-{
-    int pri = priority(val);
-    if (pri == 0)
-    {
-        (*num)++;
-    }
     node *newNode = (node *)malloc(sizeof(node));
     newNode->prev = NULL;
     newNode->next = NULL;
     newNode->priority = pri;
-    newNode->val = val;
+    strcpy(newNode->val, val);
+
+    if (pri > root->MaxPriority)
+    {
+        root->MaxPriority = pri;
+    }
 
     if (root->front == NULL && root->rear == NULL)
     {
@@ -65,16 +63,18 @@ int insert(queue *root, char val, int *num)
 node *getNodeQueue(node *ptr)
 {
     node *temp = ptr;
-    while (temp != NULL)
+    int pri = ptr->priority;
+    while (ptr != NULL)
     {
-        if (temp->priority == 1)
+        if (ptr->priority > pri)
         {
-            return temp;
+            temp = ptr;
+            pri = ptr->priority;
         }
-
-        temp = temp->next;
+        ptr = ptr->next;
     }
-    return ptr;
+
+    return temp;
 }
 
 int delete(queue *root)
@@ -85,7 +85,7 @@ int delete(queue *root)
     }
     node *delete = getNodeQueue(root->front);
 
-    printf("%c", delete->val);
+    printf("%s ", delete->val);
 
     if (delete == root->front)
     {
@@ -114,28 +114,50 @@ int delete(queue *root)
     return 1;
 }
 
+int createInsertQueue(queue *root)
+{
+    char buffer[512];
+    fgets(buffer, sizeof(buffer), stdin);
+    if (buffer[strlen(buffer) - 1] == '\n')
+    {
+        buffer[strlen(buffer) - 1] = '\0';
+    }
+
+    char *token = strtok(buffer, " ");
+    int pri = atoi(strtok(NULL, " "));
+
+    while (token != NULL)
+    {
+        insert(root, token, pri);
+        token = strtok(NULL, " ");
+        if (token == NULL)
+        {
+            break;
+        }
+        pri = atoi(strtok(NULL, " "));
+    }
+
+    return 1;
+}
+
 int main()
 {
     queue *root = createQueue();
-    char str[256];
 
-    fgets(str, sizeof(str), stdin);
-    if (str[strlen(str) - 1] == '\n')
-    {
-        str[strlen(str) - 1] = '\0';
-    }
+    createInsertQueue(root);
 
-    int num = 0;
-    for (int i = 0; i < strlen(str); i++)
-    {
-        if (str[i] != ' ')
-        {
-            insert(root, str[i], &num);
-        }
-    }
+    int num;
+    scanf("%d", &num);
 
     for (int i = 0; i < num; i++)
     {
-        delete(root);
+        if (!delete (root))
+        {
+            printf("None ");
+            // break;
+        }
     }
+    printf("\n");
+
+    return 0;
 }
