@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define COUNT 5
 
 typedef struct node
 {
@@ -44,36 +43,24 @@ int fillBalancedFactor(node *root)
     return 0;
 }
 
-void preorder(node *root)
+void preOrderData(node *root)
 {
     if (root != NULL)
     {
         printf("%d ", root->data);
-        preorder(root->left);
-        preorder(root->right);
+        preOrderData(root->left);
+        preOrderData(root->right);
     }
 }
 
-void printBinaryTree(node *root, int space, int height)
+void preOrderHeight(node *root)
 {
-    if (root == NULL)
+    if (root != NULL)
     {
-        return;
+        printf("%d ", root->height);
+        preOrderHeight(root->left);
+        preOrderHeight(root->right);
     }
-
-    space += height;
-
-    printBinaryTree(root->right, space, 10);
-    printf("\n");
-
-    for (int i = height; i < space; i++)
-    {
-        printf(" ");
-    }
-    printf("|%d : %d|", root->data, root->height);
-
-    printf("\n");
-    printBinaryTree(root->left, space, 10);
 }
 
 node *generateBinaryTree()
@@ -149,7 +136,7 @@ int main()
 
     fillBalancedFactor(root);
 
-    // preorder(root);
-
-    printBinaryTree(root, 0, 10);
+    preOrderData(root);
+    printf("\n");
+    preOrderHeight(root);
 }
